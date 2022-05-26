@@ -9,7 +9,7 @@ type ErrorType = {
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     mask?: 'cep' | 'currency' | 'cpf' | 'phone';
     error?: FieldError;
-    register: (name: string) => void;
+    register?: (name: string) => void;
 }
 
 const Input = ({ name, type, placeholder, mask, className, error, register, ...props }: InputProps) => {

@@ -2,7 +2,7 @@ import Axios, { AxiosRequestConfig } from 'axios';
 import Cookies from 'js-cookie';
 
 const axios = Axios.create({
-    baseURL: 'http://localhost:8000/',
+    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
     },
