@@ -51,10 +51,10 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
             })
     );
 
-    const csrf = () => axios.get('/sanctum/csrf-cookie');
+    // const csrf = () => axios.get('/sanctum/csrf-cookie');
 
     const registerUser = async ({ setErrors, setIsLoading, ...props }: RegisterProps) => {
-        await csrf();
+        // await csrf();
 
         setErrors([]);
         setIsLoading(true);
@@ -70,7 +70,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     };
 
     const login = async ({ setErrors, setStatus, setIsLoading, ...props }) => {
-        await csrf();
+        // await csrf();
 
         setErrors([]);
         setStatus(null);
@@ -88,7 +88,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     };
 
     const forgotPassword = async ({ setErrors, setStatus, email }) => {
-        await csrf();
+        // await csrf();
 
         setErrors([]);
         setStatus(null);
@@ -104,7 +104,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     };
 
     const resetPassword = async ({ setErrors, setStatus, ...props }) => {
-        await csrf();
+        // await csrf();
 
         setErrors([]);
         setStatus(null);
