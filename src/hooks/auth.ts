@@ -2,6 +2,7 @@ import useSWR from 'swr';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from '../server/axios';
+import Cookies from 'js-cookie';
 
 interface AuthProp {
     middleware?: string;
@@ -71,7 +72,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
 
     const login = async ({ setErrors, setStatus, setIsLoading, ...props }) => {
         // await csrf();
-
+        console.log(Cookies.get('XSRF-TOKEN'));
         setErrors([]);
         setStatus(null);
         axios

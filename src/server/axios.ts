@@ -17,7 +17,7 @@ const onRequest = (config: AxiosRequestConfig) => {
     ) {
         return setCSRFToken().then((response) => config);
     }
-    console.log(Cookies.get('XSRF-TOKEN'));
+
     return config;
 };
 
