@@ -30,6 +30,6 @@ const setCSRFToken = () => {
     return axios.get('/sanctum/csrf-cookie');
 };
 
-axios.interceptors.request.use(onRequest, null);
+// axios.interceptors.request.use(onRequest, null);
 
 export default axios;
