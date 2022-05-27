@@ -55,13 +55,11 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     const csrf = () => axios.get('/sanctum/csrf-cookie');
 
     const registerUser = async ({ setErrors, setIsLoading, ...props }: RegisterProps) => {
-        const csrfVariable = await csrf();
-        console.log('csrfVariable');
-        console.log(csrfVariable);
         setErrors([]);
         setIsLoading(true);
 
-        axios
+        await csrf();
+        await axios
             .post('/register', props)
             .then(() => revalidate())
             .catch((error) => {
