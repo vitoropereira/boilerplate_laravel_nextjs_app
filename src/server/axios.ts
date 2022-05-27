@@ -6,7 +6,7 @@ const axios = Axios.create({
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
     },
-    // withCredentials: true,
+    withCredentials: true,
 });
 
 const onRequest = (config: AxiosRequestConfig) => {
@@ -28,6 +28,6 @@ const setCSRFToken = () => {
     return axios.get('/sanctum/csrf-cookie');
 };
 
-axios.interceptors.request.use(onRequest, null);
+// axios.interceptors.request.use(onRequest, null);
 
 export default axios;
