@@ -2,7 +2,6 @@ import useSWR from 'swr';
 import { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from '../server/axios';
-import Cookies from 'js-cookie';
 
 interface AuthProp {
     middleware?: string;
@@ -55,11 +54,12 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     const csrf = () => axios.get('/sanctum/csrf-cookie');
 
     const registerUser = async ({ setErrors, setIsLoading, ...props }: RegisterProps) => {
+        await csrf();
+
         setErrors([]);
         setIsLoading(true);
 
-        await csrf();
-        await axios
+        axios
             .post('/register', props)
             .then(() => revalidate())
             .catch((error) => {
@@ -70,8 +70,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     };
 
     const login = async ({ setErrors, setStatus, setIsLoading, ...props }) => {
-        // await csrf();
-        console.log(Cookies.get('XSRF-TOKEN'));
+        await csrf();
+
         setErrors([]);
         setStatus(null);
         axios
@@ -88,7 +88,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     };
 
     const forgotPassword = async ({ setErrors, setStatus, email }) => {
-        // await csrf();
+        await csrf();
 
         setErrors([]);
         setStatus(null);
@@ -104,7 +104,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     };
 
     const resetPassword = async ({ setErrors, setStatus, ...props }) => {
-        // await csrf();
+        await csrf();
 
         setErrors([]);
         setStatus(null);
