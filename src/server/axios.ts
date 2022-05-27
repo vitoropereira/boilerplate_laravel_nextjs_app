@@ -15,12 +15,10 @@ const onRequest = (config: AxiosRequestConfig) => {
         config.method == 'put' ||
         (config.method == 'delete' && !Cookies.get('XSRF-TOKEN'))
     ) {
-        return setCSRFToken().then((response) => {
-            console.log('response');
-            console.log(response);
-            console.log(config);
-            return config;
-        });
+        console.log('process.env.NEXT_PUBLIC_BACKEND_URL');
+        console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
+        console.log(config);
+        return setCSRFToken().then((response) => config);
     }
 
     return config;
@@ -30,6 +28,6 @@ const setCSRFToken = () => {
     return axios.get('/sanctum/csrf-cookie');
 };
 
-// axios.interceptors.request.use(onRequest, null);
+axios.interceptors.request.use(onRequest, null);
 
 export default axios;
