@@ -56,6 +56,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
 
     const registerUser = async ({ setErrors, setIsLoading, ...props }: RegisterProps) => {
         const csrfVariable = await csrf();
+        console.log('csrfVariable');
         console.log(csrfVariable);
         setErrors([]);
         setIsLoading(true);
