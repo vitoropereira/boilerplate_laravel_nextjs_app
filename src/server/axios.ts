@@ -6,7 +6,7 @@ const axios = Axios.create({
     headers: {
         'X-Requested-With': 'XMLHttpRequest',
     },
-    withCredentials: true,
+    // withCredentials: true,
 });
 
 const onRequest = (config: AxiosRequestConfig) => {
