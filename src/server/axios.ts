@@ -15,10 +15,10 @@ const onRequest = (config: AxiosRequestConfig) => {
         config.method == 'put' ||
         (config.method == 'delete' && !Cookies.get('XSRF-TOKEN'))
     ) {
-        Cookies.set('XSRF-TOKEN', config.headers['X-XSRF-TOKEN']);
         return setCSRFToken().then((response) => {
             console.log('response');
             console.log(response);
+            console.log(config);
             return config;
         });
     }
