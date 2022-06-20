@@ -1,3 +1,3 @@
-# Instruções
+# Release Instructions
 
-Boilerplate Laravel API com NextJS ainda em desenvolvimento.
+Releases are done by @taylorotwell for this repository.
