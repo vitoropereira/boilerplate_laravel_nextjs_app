@@ -8,24 +8,24 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const { data: user, error, mutate } = useSWR('/api/user', () =>
         axios
-            .get('/api/user')
-            .then(res => res.data)
-            .catch(error => {
-                if (error.response.status !== 409) throw error
+        .get('/api/user')
+        .then(res => res.data)
+        .catch(error => {
+            if (error.response.status !== 409) throw error
 
-                router.push('/verify-email')
-            }),
+            router.push('/verify-email')
+        }),
     )
 
     const csrf = () => axios.get('/sanctum/csrf-cookie')
 
-    const register = async ({ setErrors, ...props }) => {
+    const register = async({ setErrors, ...props }) => {
         await csrf()
 
         setErrors([])
 
         axios
-            .post('/register', props)
+            .post('/api/register', props)
             .then(() => mutate())
             .catch(error => {
                 if (error.response.status !== 422) throw error
@@ -34,14 +34,14 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             })
     }
 
-    const login = async ({ setErrors, setStatus, ...props }) => {
+    const login = async({ setErrors, setStatus, ...props }) => {
         await csrf()
 
         setErrors([])
         setStatus(null)
 
         axios
-            .post('/login', props)
+            .post('/api/login', props)
             .then(() => mutate())
             .catch(error => {
                 if (error.response.status !== 422) throw error
@@ -50,7 +50,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             })
     }
 
-    const forgotPassword = async ({ setErrors, setStatus, email }) => {
+    const forgotPassword = async({ setErrors, setStatus, email }) => {
         await csrf()
 
         setErrors([])
@@ -66,7 +66,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             })
     }
 
-    const resetPassword = async ({ setErrors, setStatus, ...props }) => {
+    const resetPassword = async({ setErrors, setStatus, ...props }) => {
         await csrf()
 
         setErrors([])
@@ -74,7 +74,9 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
         axios
             .post('/reset-password', { token: router.query.token, ...props })
-            .then(response => router.push('/login?reset=' + btoa(response.data.status)))
+            .then(response =>
+                router.push('/login?reset=' + btoa(response.data.status)),
+            )
             .catch(error => {
                 if (error.response.status !== 422) throw error
 
@@ -88,18 +90,17 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
             .then(response => setStatus(response.data.status))
     }
 
-    const logout = async () => {
-        if (! error) {
-            await axios
-                .post('/logout')
-                .then(() => mutate())
+    const logout = async() => {
+        if (!error) {
+            await axios.post('/logout').then(() => mutate())
         }
 
         window.location.pathname = '/login'
     }
 
     useEffect(() => {
-        if (middleware === 'guest' && redirectIfAuthenticated && user) router.push(redirectIfAuthenticated)
+        if (middleware === 'guest' && redirectIfAuthenticated && user)
+            router.push(redirectIfAuthenticated)
         if (middleware === 'auth' && error) logout()
     }, [user, error])
 
