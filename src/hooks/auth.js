@@ -36,7 +36,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const login = async({ setErrors, setStatus, ...props }) => {
         await csrf()
-
+        console.log('process.env.NEXT_PUBLIC_BACKEND_URL')
+        console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
         setErrors([])
         setStatus(null)
 
