@@ -26,7 +26,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
         axios
             .post('/register', props)
-            .then(() => mutate())
+            .then(response => console.log(response.data))
             .catch(error => {
                 if (error.response.status !== 422) throw error
 
@@ -36,14 +36,13 @@ export const useAuth = ({ middleware, redirectIfAuthenticated } = {}) => {
 
     const login = async({ setErrors, setStatus, ...props }) => {
         await csrf()
-        console.log('process.env.NEXT_PUBLIC_BACKEND_URL')
-        console.log(process.env.NEXT_PUBLIC_BACKEND_URL)
+
         setErrors([])
         setStatus(null)
 
         axios
             .post('/login', props)
-            .then(() => mutate())
+            .then(response => console.log(response.data))
             .catch(error => {
                 if (error.response.status !== 422) throw error
 
