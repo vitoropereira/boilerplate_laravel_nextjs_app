@@ -1,11 +1,7 @@
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+import Document, { Html, Head, Main, NextScript, DocumentContext } from 'next/document';
+import Toast from '../components/toast';
 
 class MyDocument extends Document {
-    static async getInitialProps(ctx) {
-        const initialProps = await Document.getInitialProps(ctx)
-        return { ...initialProps }
-    }
-
     render() {
         return (
             <Html>
@@ -17,11 +13,12 @@ class MyDocument extends Document {
                 </Head>
                 <body className="antialiased">
                     <Main />
+
                     <NextScript />
                 </body>
             </Html>
-        )
+        );
     }
 }
 
-export default MyDocument
+export default MyDocument;

@@ -1,11 +1,8 @@
-import { useAuth } from '../hooks/auth';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
-export default function Home() {
-    const { user } = useAuth({ middleware: 'guest' });
-
+export default function Admin() {
     const route = useRouter();
 
     useEffect(() => {
@@ -13,10 +10,8 @@ export default function Home() {
     }, []);
 
     return (
-        <>
-            <Head>
-                <title>Jangatur</title>
-            </Head>
-        </>
+        <Head>
+            <title>Jangatur</title>
+        </Head>
     );
 }

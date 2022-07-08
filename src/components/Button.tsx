@@ -1,11 +1,11 @@
-import { ButtonHTMLAttributes } from "react"
+import { ButtonHTMLAttributes } from 'react';
 
-const Button = ({ type = 'submit', className, ...props }:ButtonHTMLAttributes<HTMLButtonElement>) => (
+const Button = ({ type = 'submit', className, ...props }: ButtonHTMLAttributes<HTMLButtonElement>) => (
     <button
         type={type}
-        className={`${className} inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150`}
+        className={`${className} group relative flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500`}
         {...props}
     />
-)
+);
 
-export default Button
+export default Button;

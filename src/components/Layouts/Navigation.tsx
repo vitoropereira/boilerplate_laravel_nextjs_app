@@ -1,19 +1,47 @@
-import ApplicationLogo from '../ApplicationLogo'
-import Dropdown from '../Dropdown'
-import Link from 'next/link'
-import NavLink from '../NavLink'
-import ResponsiveNavLink, { ResponsiveNavButton } from '../ResponsiveNavLink'
-import { DropdownButton } from '../DropdownLink'
-import { useAuth } from '../../hooks/auth'
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import ApplicationLogo from '../ApplicationLogo';
+import Dropdown from '../Dropdown';
+import Link from 'next/link';
+import NavLink from '../NavLink';
+import ResponsiveNavLink, { ResponsiveNavButton } from '../ResponsiveNavLink';
+import { DropdownButton } from '../DropdownLink';
+import { useAuth } from '../../hooks/auth';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+
+const navigation = [
+    { id: 1, access_level: 1, name: 'Dashboard', href: '/dashboard', path: '/admin/dashboard' },
+    { id: 2, access_level: 1, name: 'Destinos', href: '/destinos', path: '/admin/dashboard/destinos' },
+    { id: 3, access_level: 1, name: 'Produtos', href: '/produtos', path: '/admin/dashboard/produtos' },
+    {
+        id: 4,
+        access_level: 2,
+        name: 'Financeiro',
+        href: '/financeiro',
+        path: '/admin/dashboard/financeiro',
+    },
+];
 
 const Navigation = ({ user }) => {
-    const router = useRouter()
+    const router = useRouter();
 
-    const { logout } = useAuth({})
+    const { logout } = useAuth({});
 
-    const [open, setOpen] = useState(false)
+    function handleMyDatas() {
+        if (router.pathname === '/admin/dashboard') {
+            router.push('./dashboard/meus-dados');
+        } else {
+            router.push('./meus-dados');
+        }
+    }
+
+    const [open, setOpen] = useState(false);
+    const [isLoad, setIsLoad] = useState(false);
+
+    useEffect(() => {
+        if (user) {
+            setIsLoad(true);
+        }
+    }, [user]);
 
     return (
         <nav className="bg-white border-b border-gray-100">
@@ -25,18 +53,23 @@ const Navigation = ({ user }) => {
                         <div className="flex-shrink-0 flex items-center">
                             <Link href="/dashboard">
                                 <a>
-                                    <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" />
+                                    {/* <ApplicationLogo className="block h-10 w-auto fill-current text-gray-600" /> */}
                                 </a>
                             </Link>
                         </div>
 
                         {/* Navigation Links */}
                         <div className="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                            <NavLink
-                                href="/dashboard"
-                                active={router.pathname === '/dashboard'}>
-                                Dashboard
-                            </NavLink>
+                            {isLoad &&
+                                navigation.map((nav) => {
+                                    if (nav.access_level <= user.access_level) {
+                                        return (
+                                            <NavLink key={nav.id} href={nav.path} active={router.pathname === nav.path}>
+                                                {nav.name}
+                                            </NavLink>
+                                        );
+                                    }
+                                })}
                         </div>
                     </div>
 
@@ -63,24 +96,18 @@ const Navigation = ({ user }) => {
                                     </div>
                                 </button>
                             }>
-
                             {/* Authentication */}
-                            <DropdownButton onClick={logout}>
-                                Logout
-                            </DropdownButton>
+                            <DropdownButton onClick={handleMyDatas}>Meus Dados</DropdownButton>
+                            <DropdownButton onClick={logout}>Logout</DropdownButton>
                         </Dropdown>
                     </div>
 
                     {/* Hamburger */}
                     <div className="-mr-2 flex items-center sm:hidden">
                         <button
-                            onClick={() => setOpen(open => !open)}
+                            onClick={() => setOpen((open) => !open)}
                             className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                            <svg
-                                className="h-6 w-6"
-                                stroke="currentColor"
-                                fill="none"
-                                viewBox="0 0 24 24">
+                            <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                                 {open ? (
                                     <path
                                         className="inline-flex"
@@ -108,11 +135,19 @@ const Navigation = ({ user }) => {
             {open && (
                 <div className="block sm:hidden">
                     <div className="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink
-                            href="/dashboard"
-                            active={router.pathname === '/dashboard'}>
-                            Dashboard
-                        </ResponsiveNavLink>
+                        {isLoad &&
+                            navigation.map((nav) => {
+                                if (nav.access_level <= user.function_id) {
+                                    return (
+                                        <ResponsiveNavLink
+                                            key={nav.id}
+                                            href={nav.href}
+                                            active={router.pathname === nav.path}>
+                                            {nav.name}
+                                        </ResponsiveNavLink>
+                                    );
+                                }
+                            })}
                     </div>
 
                     {/* Responsive Settings Options */}
@@ -135,26 +170,20 @@ const Navigation = ({ user }) => {
                             </div>
 
                             <div className="ml-3">
-                                <div className="font-medium text-base text-gray-800">
-                                    {user?.name}
-                                </div>
-                                <div className="font-medium text-sm text-gray-500">
-                                    {user?.email}
-                                </div>
+                                <div className="font-medium text-base text-gray-800">{user?.name}</div>
+                                <div className="font-medium text-sm text-gray-500">{user?.email}</div>
                             </div>
                         </div>
 
                         <div className="mt-3 space-y-1">
                             {/* Authentication */}
-                            <ResponsiveNavButton onClick={logout}>
-                                Logout
-                            </ResponsiveNavButton>
+                            <ResponsiveNavButton onClick={logout}>Logout</ResponsiveNavButton>
                         </div>
                     </div>
                 </div>
             )}
         </nav>
-    )
-}
+    );
+};
 
-export default Navigation
+export default Navigation;
