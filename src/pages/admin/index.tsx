@@ -11,7 +11,7 @@ export default function Admin() {
 
     return (
         <Head>
-            <title>Jangatur</title>
+            <title>Meu Boilerplate</title>
         </Head>
     );
 }

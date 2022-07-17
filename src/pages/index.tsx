@@ -4,8 +4,6 @@ import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 
 export default function Home() {
-    const { user } = useAuth({ middleware: 'guest' });
-
     const route = useRouter();
 
     useEffect(() => {
@@ -15,7 +13,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <title>Jangatur</title>
+                <title>Meu Boilerplate</title>
             </Head>
         </>
     );

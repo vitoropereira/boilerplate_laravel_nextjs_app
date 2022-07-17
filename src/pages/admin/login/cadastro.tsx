@@ -59,9 +59,7 @@ const Register = () => {
 
     const submitForm = (event) => {
         event.preventDefault();
-        try {
-            setIsLoading(true);
-        } catch (error) {}
+        setIsLoading(true);
     };
 
     return (

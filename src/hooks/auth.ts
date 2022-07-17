@@ -1,8 +1,10 @@
 import useSWR from 'swr';
-import { useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import axios from '../server/axios';
 import Cookies from 'js-cookie';
+import { AuthUserContext } from '../utils/authContext';
+import { Console } from 'console';
 
 interface AuthProp {
     middleware?: string;
@@ -35,32 +37,46 @@ export interface UserProps {
     state?: string;
 }
 
+interface AuthProps {
+    user: UserProps;
+    token: string;
+}
+
 export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
+    const [token, setToken] = useState<string>('');
+    const { user, setUser } = useContext(AuthUserContext);
+
     const router = useRouter();
 
-    const {
-        data: user,
-        error,
-        revalidate,
-    } = useSWR<UserProps>('user', () =>
+    const { data, error } = useSWR<AuthProps>('/api/user', () =>
         axios
             .get('/api/user')
-            .then(() => revalidate())
+            .then((response) => {
+                setToken(response.data.token);
+                setUser(response.data.user);
+                return response.data;
+            })
             .catch((error) => {
                 if (error.response.status !== 409) throw error;
                 router.push('/verify-email');
             })
     );
 
-    const csrf = () => axios.get('/sanctum/csrf-cookie');
+    axios.defaults.headers.common['Authorization'] = `Bearer ${Cookies.get('token')}`;
 
     const registerUser = async ({ setErrors, setIsLoading, ...props }: RegisterProps) => {
         setErrors([]);
         setIsLoading(true);
 
-        await axios
-            .post('/register', props)
-            .then(() => revalidate())
+        axios
+            .post('/api/register', props)
+            .then((response) => {
+                console.log('response.data');
+                console.log(response.data);
+                setToken(response.data.token);
+                setUser(response.data.user);
+                return;
+            })
             .catch((error) => {
                 if (error.response.status !== 422) throw error;
                 setIsLoading(false);
@@ -69,20 +85,21 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     };
 
     const login = async ({ setErrors, setStatus, setIsLoading, ...props }) => {
-        const token = await csrf();
-
-        console.log(token.config.headers['X-XSRF-TOKEN']);
-        console.log(Cookies.get('XSRF-TOKEN'));
-        console.log(Cookies.get('jangatur_session'));
-        console.log(user);
-
         setErrors([]);
         setStatus(null);
         axios
-            .post('/login', props)
-            .then(() => revalidate())
+            .post('/api/login', props)
+            .then((res) => {
+                console.log('res.data.token');
+                console.log(res.data.token);
+                Cookies.set('token', res.data.token);
+                setToken(res.data.token);
+                setUser(res.data.user);
+                return;
+            })
             .catch((error) => {
-                if (error.response.status !== 422) throw error;
+                console.log(error);
+                if (error.response?.status !== 422) throw error;
                 setErrors(Object.values(error.response.data.errors).flat());
             })
             .finally(() => {
@@ -92,8 +109,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     };
 
     const forgotPassword = async ({ setErrors, setStatus, email }) => {
-        await csrf();
-
         setErrors([]);
         setStatus(null);
 
@@ -108,8 +123,6 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
     };
 
     const resetPassword = async ({ setErrors, setStatus, ...props }) => {
-        await csrf();
-
         setErrors([]);
         setStatus(null);
 
@@ -129,9 +142,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
 
     const logout = async () => {
         if (!error) {
-            await axios.post('/logout');
-
-            revalidate();
+            await axios.post('/api/logout/' + user.id);
         }
 
         window.location.pathname = '/';
@@ -144,6 +155,8 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
 
     return {
         user,
+        token,
+        data,
         registerUser,
         login,
         forgotPassword,

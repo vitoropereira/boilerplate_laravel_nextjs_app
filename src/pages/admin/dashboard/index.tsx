@@ -1,11 +1,10 @@
 import Head from 'next/head';
-import { useState } from 'react';
+import { useContext } from 'react';
 import AppLayout from '../../../components/Layouts/AppLayout';
-import { useAuth, UserProps } from '../../../hooks/auth';
+import { AuthUserContext } from '../../../utils/authContext';
 
 const Dashboard = () => {
-    const { user } = useAuth({ middleware: 'auth' });
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { user } = useContext(AuthUserContext);
 
     return (
         <AppLayout
@@ -15,7 +14,7 @@ const Dashboard = () => {
                 </h2>
             }>
             <Head>
-                <title>Jangatur - Usuários</title>
+                <title>Meu BoilerPlate</title>
             </Head>
             {!user ? (
                 <div className="flex justify-center items-center h-96 w-full">

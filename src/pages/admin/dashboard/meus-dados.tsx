@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { FaCamera } from 'react-icons/fa';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
@@ -12,13 +11,12 @@ import Button from '../../../components/Button';
 import Input from '../../../components/Input';
 import AppLayout from '../../../components/Layouts/AppLayout';
 import AuthValidationSuccess from '../../../components/AuthValidationSuccess';
+import { AuthUserContext } from '../../../utils/authContext';
 
 import profile from '../../../../public/images/profile_img.png';
 
 const MyData = () => {
-    const { user } = useAuth({
-        middleware: 'auth',
-    });
+    const { user } = useContext(AuthUserContext);
 
     const {
         register,
@@ -39,8 +37,6 @@ const MyData = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [alert, setAlert] = useState(false);
     const [apiErros, setApiErros] = useState([]);
-
-    const route = useRouter();
 
     const csrf = () => axios.get('/sanctum/csrf-cookie');
 
@@ -144,7 +140,7 @@ const MyData = () => {
                 </h2>
             }>
             <Head>
-                <title>Jangatur - Usuários</title>
+                <title>Meu Boilerplate</title>
             </Head>
             {!user ? (
                 <div className="flex justify-center items-center h-96 w-full">

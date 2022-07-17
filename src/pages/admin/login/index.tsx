@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import { useAuth } from '../../../hooks/auth';
-import ApplicationLogo from '../../../components/ApplicationLogo';
 import AuthCard from '../../../components/AuthCard';
 import AuthSessionStatus from '../../../components/AuthSessionStatus';
 import AuthValidationErrors from '../../../components/AuthValidationErrors';
@@ -11,7 +10,6 @@ import GuestLayout from '../../../components/Layouts/GuestLayout';
 import Input from '../../../components/Input';
 import Label from '../../../components/Label';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 interface LoginFormDataProps {
     email: string;
@@ -19,18 +17,11 @@ interface LoginFormDataProps {
 }
 
 const Login = () => {
-    const route = useRouter();
-
     const [apiError, setApiError] = useState([]);
     const [status, setStatus] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
     const { register, handleSubmit } = useForm<LoginFormDataProps>();
-
-    const { login } = useAuth({
-        middleware: 'guest',
-        redirectIfAuthenticated: './dashboard',
-    });
 
     const onSubmit: SubmitHandler<LoginFormDataProps> = (data) => {
         try {
@@ -44,13 +35,16 @@ const Login = () => {
                 setStatus,
                 setIsLoading,
             });
-
-            route.push('./dashboard');
         } catch (error) {
             console.log(error);
             setIsLoading(false);
         }
     };
+
+    const { login } = useAuth({
+        middleware: 'guest',
+        redirectIfAuthenticated: './dashboard',
+    });
 
     function thereIsAnError() {
         if (apiError.length > 0) {

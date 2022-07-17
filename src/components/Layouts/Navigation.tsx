@@ -4,22 +4,11 @@ import Link from 'next/link';
 import NavLink from '../NavLink';
 import ResponsiveNavLink, { ResponsiveNavButton } from '../ResponsiveNavLink';
 import { DropdownButton } from '../DropdownLink';
-import { useAuth } from '../../hooks/auth';
+import { useAuth, UserProps } from '../../hooks/auth';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 
-const navigation = [
-    { id: 1, access_level: 1, name: 'Dashboard', href: '/dashboard', path: '/admin/dashboard' },
-    { id: 2, access_level: 1, name: 'Destinos', href: '/destinos', path: '/admin/dashboard/destinos' },
-    { id: 3, access_level: 1, name: 'Produtos', href: '/produtos', path: '/admin/dashboard/produtos' },
-    {
-        id: 4,
-        access_level: 2,
-        name: 'Financeiro',
-        href: '/financeiro',
-        path: '/admin/dashboard/financeiro',
-    },
-];
+const navigation = [{ id: 1, access_level: 1, name: 'Dashboard', href: '/dashboard', path: '/admin/dashboard' }];
 
 const Navigation = ({ user }) => {
     const router = useRouter();
