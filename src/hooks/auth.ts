@@ -68,20 +68,20 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
         setErrors([]);
         setIsLoading(true);
 
-        axios
+        const response = axios
             .post('/api/register', props)
             .then((response) => {
-                console.log('response.data');
-                console.log(response.data);
                 setToken(response.data.token);
                 setUser(response.data.user);
-                return;
+                return response.status;
             })
             .catch((error) => {
                 if (error.response.status !== 422) throw error;
                 setIsLoading(false);
                 setErrors(Object.values(error.response.data.errors).flat());
             });
+
+        return response;
     };
 
     const login = async ({ setErrors, setStatus, setIsLoading, ...props }) => {
@@ -90,21 +90,14 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
         axios
             .post('/api/login', props)
             .then((res) => {
-                console.log('res.data.token');
-                console.log(res.data.token);
                 Cookies.set('token', res.data.token);
                 setToken(res.data.token);
                 setUser(res.data.user);
                 return;
             })
             .catch((error) => {
-                console.log(error);
                 if (error.response?.status !== 422) throw error;
                 setErrors(Object.values(error.response.data.errors).flat());
-            })
-            .finally(() => {
-                setStatus(null);
-                setIsLoading(false);
             });
     };
 
@@ -128,7 +121,7 @@ export const useAuth = ({ middleware, redirectIfAuthenticated }: AuthProp) => {
 
         axios
             .post('/reset-password', { token: router.query.token, ...props })
-            .then((response) => router.push('../login?reset=' + btoa(response.data.status)))
+            .then((response) => router.push('../../?reset=' + btoa(response.data.status)))
             .catch((error) => {
                 if (error.response.status != 422) throw error;
 

@@ -1,9 +1,12 @@
 import { useContext } from 'react';
 import Navigation from '../../components/Layouts/Navigation';
+import { useAuth } from '../../hooks/auth';
 import { AuthUserContext } from '../../utils/authContext';
 
 const AppLayout = ({ header, children }) => {
     const { user } = useContext(AuthUserContext);
+
+    const {} = useAuth({ middleware: 'auth' });
 
     return (
         <div className="min-h-screen bg-gray-100">

@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { useContext } from 'react';
 import AppLayout from '../../../components/Layouts/AppLayout';
+import { useAuth } from '../../../hooks/auth';
 import { AuthUserContext } from '../../../utils/authContext';
 
 const Dashboard = () => {

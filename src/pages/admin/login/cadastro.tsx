@@ -35,7 +35,7 @@ const Register = () => {
         try {
             setIsLoading(true);
 
-            await registerUser({
+            const response = await registerUser({
                 name: data.name,
                 email: data.email,
                 password: data.password,
@@ -44,15 +44,14 @@ const Register = () => {
                 setIsLoading,
             });
 
-            if (errors.length === 0) {
-                notifySuccess('Cadastro realizado com sucesso!', 4000);
+            if (response === 200) {
+                notifySuccess('Cadastro realizado com sucesso!', 5000);
             } else {
                 notifyError('Erro ao fazer seu cadastro, tente novamente mais tarde.', 4000);
                 setIsLoading(false);
             }
         } catch (error) {
             notifyError('Erro ao tentar realizar o cadastro. Favor tentar mais tarde.', 4000);
-            console.log(error);
             setIsLoading(false);
         }
     };

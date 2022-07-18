@@ -14,6 +14,7 @@ import AuthValidationSuccess from '../../../components/AuthValidationSuccess';
 import { AuthUserContext } from '../../../utils/authContext';
 
 import profile from '../../../../public/images/profile_img.png';
+import { notifyError, notifySuccess } from '../../../hooks/toast';
 
 const MyData = () => {
     const { user } = useContext(AuthUserContext);
@@ -35,26 +36,20 @@ const MyData = () => {
 
     const [image_path, setImage_path] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [alert, setAlert] = useState(false);
     const [apiErros, setApiErros] = useState([]);
 
-    const csrf = () => axios.get('/sanctum/csrf-cookie');
-
     const saveMyData = async ({ setApiErros, data, user_id }) => {
-        await csrf();
-
-        setApiErros([]);
-
-        axios
-            .put(`users/${user_id}`, data)
-            .then(() => {
-                setAlert(true);
-                setIsLoading(false);
+        const response = axios
+            .put(`/api/user/${user_id}`, data)
+            .then((response) => {
+                return response.status;
             })
             .catch((error) => {
                 if (error.response.status !== 422) throw error;
-                setApiErros(Object.values(error.response.data.error).flat());
+                setApiErros([error.response.data.message]);
             });
+
+        return response;
     };
 
     const onSubmit: SubmitHandler<UserProps> = async (data) => {
@@ -62,69 +57,83 @@ const MyData = () => {
 
         if (data.cpf == '') {
             setIsLoading(false);
-            return setApiErros(['Preencha o campo CPF']);
+            setApiErros(['Preencha o campo CPF']);
+            setApiErros([]);
+            return;
+        }
+
+        const cfpError = handleCheckCPF(data.cpf);
+
+        if (cfpError !== '') {
+            setIsLoading(false);
+            setApiErros([cfpError]);
+            return;
         }
 
         Object.keys(data).map((key) => (data[key] === null || data[key] === '' ? delete data[key] : ''));
+
         try {
             const user_id = user.id;
 
-            await saveMyData({
+            const userResponse = await saveMyData({
                 setApiErros,
                 data,
                 user_id,
             });
 
-            setIsLoading(false);
-            setAlert(true);
-
-            window.scrollTo(0, 0);
-
-            setTimeout(() => {
-                setAlert(false);
-            }, 5000);
-            // route.push('/admin/dashboard');
+            if (userResponse === 200) {
+                setIsLoading(false);
+                notifySuccess('Dados atualizados com sucesso!', 4000);
+            } else {
+                setIsLoading(false);
+                notifyError('Erro ao atualizar os dados!', 4000);
+            }
         } catch (err) {
-            console.log(err);
-            console.log(errors.name?.message);
-
             setApiErros(['Erro ao salvar os dados, tente novamente mais tarde.']);
             setIsLoading(false);
         }
     };
 
-    function handleCheckCPF(event: React.FormEvent<HTMLInputElement>) {
-        const { value } = event.currentTarget;
+    function handleCheckCPF(cpf: string) {
+        let strCPF = cpf;
+        strCPF = String(strCPF.replace(/[^\d]+/g, ''));
 
-        let strCPF = value;
-        strCPF = strCPF.replace(/[^\d]+/g, '');
+        if (strCPF.length > 11) {
+            setApiErros(['CPF Invalido']);
+            return;
+        }
 
         var Soma: number;
         var Resto: number;
         Soma = 0;
 
-        if (strCPF == '00000000000') return setApiErros(['CPF Invalido']);
+        if (strCPF === '00000000000') {
+            setApiErros(['CPF Invalido']);
+            return;
+        }
 
         for (var i = 1; i <= 9; i++) {
             Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (11 - i);
             Resto = (Soma * 10) % 11;
         }
         if (Resto == 10 || Resto == 11) Resto = 0;
-        if (Resto != parseInt(strCPF.substring(9, 10))) return setApiErros(['CPF Invalido']);
+        if (Resto != parseInt(strCPF.substring(9, 10))) return 'CPF Invalido';
 
         Soma = 0;
         for (i = 1; i <= 10; i++) Soma = Soma + parseInt(strCPF.substring(i - 1, i)) * (12 - i);
         Resto = (Soma * 10) % 11;
 
         if (Resto == 10 || Resto == 11) Resto = 0;
-        if (Resto != parseInt(strCPF.substring(10, 11))) return setApiErros(['CPF Invalido']);
+        if (Resto != parseInt(strCPF.substring(10, 11))) return 'CPF Invalido';
 
-        return setApiErros([]);
+        return '';
     }
 
     function thereIsAnError() {
         if (apiErros.length > 0) {
+            apiErros.forEach((error) => notifyError(error, 4000));
             setIsLoading(false);
+            setApiErros([]);
         }
     }
 
@@ -135,26 +144,21 @@ const MyData = () => {
     return (
         <AppLayout
             header={
-                <h2 className="font-semibold text-xl text-gray-800 leading-tight">
-                    {!user ? 'Carregando...' : 'Meus dados'}
-                </h2>
+                <>
+                    <h2 className="font-semibold text-xl text-gray-800 leading-tight">
+                        {!user ? 'Carregando...' : 'Meus dados'}
+                    </h2>
+                </>
             }>
             <Head>
                 <title>Meu Boilerplate</title>
             </Head>
-            {!user ? (
+            {isLoading || !user ? (
                 <div className="flex justify-center items-center h-96 w-full">
                     <div className="w-16 h-16 border-4 border-blue-400 border-solid border-y-white rounded-full animate-spin"></div>
                 </div>
             ) : (
                 <>
-                    {alert && (
-                        <AuthValidationSuccess
-                            successMessage="Seus dados foram salvos com sucesso."
-                            titleMessage="Dados salvos com sucesso!"
-                            handleCloseAlert={() => setAlert(false)}
-                        />
-                    )}
                     <div className="py-12">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div className="w-full mx-2 sm:px-4 lg:px-6">
@@ -193,6 +197,7 @@ const MyData = () => {
                                 <div className="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                                     <div className="p-6 bg-white border-b border-gray-200">
                                         <AuthValidationErrors className="mb-4" errors={apiErros} />
+
                                         <form onSubmit={handleSubmit(onSubmit)}>
                                             <h6 className="text-blueGray-400 text-sm mt-3 mb-6 font-bold uppercase">
                                                 Informação do Usuário
@@ -245,8 +250,8 @@ const MyData = () => {
                                                             max="14"
                                                             name="cpf"
                                                             mask="cpf"
-                                                            onKeyUp={(event) => handleCheckCPF(event)}
                                                             register={register}
+                                                            maxLength={11}
                                                         />
                                                     </div>
                                                 </div>
@@ -401,11 +406,6 @@ const MyData = () => {
                                                 </Button>
                                             </div>
                                         </form>
-                                        {isLoading && (
-                                            <div>
-                                                <div className="w-8 h-8 border-4 border-blue-400 border-solid border-y-white rounded-full animate-spin"></div>
-                                            </div>
-                                        )}
                                     </div>
                                 </div>
                             </div>

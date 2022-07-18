@@ -12,9 +12,6 @@ const axios = Axios.create({
 axios.defaults.withCredentials = true;
 
 const onRequest = (config: AxiosRequestConfig) => {
-    console.log('setCSRFToken');
-    console.log(Cookies.get('XSRF-TOKEN'));
-    console.log(process.env.NEXT_PUBLIC_BACKEND_URL);
     if (
         config.method == 'post' ||
         config.method == 'put' ||

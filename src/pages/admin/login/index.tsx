@@ -10,25 +10,35 @@ import GuestLayout from '../../../components/Layouts/GuestLayout';
 import Input from '../../../components/Input';
 import Label from '../../../components/Label';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 interface LoginFormDataProps {
     email: string;
     password: string;
 }
 
-const Login = () => {
+interface LoginProps {
+    resetToken?: string;
+}
+
+const Login = ({ resetToken }: LoginProps) => {
     const [apiError, setApiError] = useState([]);
     const [status, setStatus] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
+    const { login } = useAuth({
+        middleware: 'guest',
+        redirectIfAuthenticated: './dashboard',
+    });
+
     const { register, handleSubmit } = useForm<LoginFormDataProps>();
 
-    const onSubmit: SubmitHandler<LoginFormDataProps> = (data) => {
+    const onSubmit: SubmitHandler<LoginFormDataProps> = async (data) => {
         try {
             setIsLoading(true);
             setStatus('');
 
-            login({
+            await login({
                 email: data.email,
                 password: data.password,
                 setErrors: setApiError,
@@ -41,10 +51,13 @@ const Login = () => {
         }
     };
 
-    const { login } = useAuth({
-        middleware: 'guest',
-        redirectIfAuthenticated: './dashboard',
-    });
+    useEffect(() => {
+        if (resetToken && apiError.length === 0) {
+            setStatus(atob(resetToken));
+        } else {
+            setStatus(null);
+        }
+    }, [apiError, resetToken]);
 
     function thereIsAnError() {
         if (apiError.length > 0) {
@@ -129,5 +142,20 @@ const Login = () => {
         </GuestLayout>
     );
 };
+
+export async function getServerSideProps(ctx: { query: { reset?: string } }) {
+    const { reset } = ctx.query;
+
+    if (reset) {
+        return {
+            props: {
+                resetToken: reset,
+            },
+        };
+    }
+    return {
+        props: {},
+    };
+}
 
 export default Login;
