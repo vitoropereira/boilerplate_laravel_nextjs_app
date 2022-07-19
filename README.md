@@ -10,19 +10,13 @@ Boilerplate APP NextJS com Laravel API
 </h4>
 
 <p align="center">
-  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/vitoropereira/
-boilerplate_laravel_nextjs_app?color=%2304D361">
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/vitoropereira/
-boilerplate_laravel_nextjs_app">
-  <a href="https://github.com/vitoropereira/
-boilerplate_laravel_nextjs_app/commits/main">
-    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/vitoropereira/
-boilerplate_laravel_nextjs_app">
+  <img alt="GitHub language count" src="https://img.shields.io/github/languages/count/vitoropereira/boilerplate_laravel_nextjs_app?color=%2304D361">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/vitoropereira/boilerplate_laravel_nextjs_app">
+  <a href="https://github.com/vitoropereira/boilerplate_laravel_nextjs_app/commits/main">
+    <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/vitoropereira/boilerplate_laravel_nextjs_app">
   </a>
-   <a href="https://github.com/vitoropereira/
-boilerplate_laravel_nextjs_app/stargazers">
-    <img alt="Stargazers" src="https://img.shields.io/github/stars/vitoropereira/
-boilerplate_laravel_nextjs_app?style=social">
+   <a href="https://github.com/vitoropereira/boilerplate_laravel_nextjs_app/stargazers">
+    <img alt="Stargazers" src="https://img.shields.io/github/stars/vitoropereira/boilerplate_laravel_nextjs_app?style=social">
   </a>
 </p>
 
