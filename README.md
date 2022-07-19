@@ -93,4 +93,8 @@ $ npm run dev
 [vscode]: https://code.visualstudio.com/
 [nodejs]: https://nodejs.org/
 [uuidv4]: https://www.npmjs.com/package/uuidv4
-[uuidv4]: https://swr.vercel.app/pt-BR
+[swr]: https://swr.vercel.app/pt-BR
+[yup]: https://www.npmjs.com/package/yup
+[axios]: https://axios-http.com/docs/intro
+[js-cookie]: https://www.npmjs.com/package/js-cookie
+[slugify]: https://www.npmjs.com/package/slugify
