@@ -84,6 +84,8 @@ $ npm run dev
 4. Envie as suas alterações: `git push origin my-feature`
 > Caso tenha alguma dúvida confira este [guia de como contribuir no GitHub](https://github.com/firstcontributions/first-contributions)
 
+## Contato:
+Enviar e-mail para: vop1234@hotmail.com
 
 [typescript]: https://www.typescriptlang.org/
 [classnames]: https://www.npmjs.com/package/classnames
