@@ -25,6 +25,16 @@ Boilerplate APP NextJS com Laravel API
 
 Eu Vitor Pereira, desenvolvi este boilerplate para _"startar"_ projetos com mais facilidades. A intenção é utilizar o backend com Laravel e frontend com NextJS. (Veja o repositório [Boilerplate-Laravel](https://github.com/vitoropereira/boilerplate_laravel_nextjs_api))
 
+Esse projeto vem com as seguintes funcionalidades:
+ * Criar conta no sistema;
+ * Atualizar dados cadastrais;
+ * Realizar login; e
+ * Recupera senha;
+
+Realizado deploy no Heroku em ambientes separados.
+API em Laravel: 
+[APP-WEB](https://boilerplate-laravel-nextjs-app.herokuapp.com/)
+
 ## 🛠 Tecnologias
 
 As seguintes ferramentas foram usadas na construção do projeto:
