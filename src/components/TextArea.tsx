@@ -6,7 +6,7 @@ type ErrorType = {
 
 interface TextAreaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     error?: ErrorType[];
-    register: (name: string) => void;
+    register: (name: string, RegisterOptions?) => { onChange; onBlur; name; ref };
 }
 
 const TextArea = ({ name, placeholder, register, className, children, error, ...props }: TextAreaProps) => {
