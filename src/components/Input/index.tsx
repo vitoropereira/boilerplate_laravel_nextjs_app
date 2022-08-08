@@ -2,14 +2,10 @@ import { InputHTMLAttributes, useCallback } from 'react';
 import { FieldError } from 'react-hook-form';
 import { cep, cpf, currency, phone } from './mask';
 
-type ErrorType = {
-    error?: string;
-};
-
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
     mask?: 'cep' | 'currency' | 'cpf' | 'phone';
     error?: FieldError;
-    register: (name: string) => void;
+    register: (name: string, RegisterOptions?) => { onChange; onBlur; name; ref };
 }
 
 const Input = ({ name, type, placeholder, mask, className, error, register, ...props }: InputProps) => {

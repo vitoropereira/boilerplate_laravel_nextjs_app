@@ -5,7 +5,7 @@ import { FaCamera } from 'react-icons/fa';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 import axios from '../../../server/axios';
-import { useAuth, UserProps } from '../../../hooks/auth';
+import { UserProps } from '../../../hooks/auth';
 import AuthValidationErrors from '../../../components/AuthValidationErrors';
 import Button from '../../../components/Button';
 import Input from '../../../components/Input';

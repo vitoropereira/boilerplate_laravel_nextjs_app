@@ -1,4 +1,3 @@
-import ApplicationLogo from '../../../components/ApplicationLogo';
 import AuthCard from '../../../components/AuthCard';
 import AuthSessionStatus from '../../../components/AuthSessionStatus';
 import AuthValidationErrors from '../../../components/AuthValidationErrors';
@@ -9,7 +8,6 @@ import Label from '../../../components/Label';
 import Link from 'next/link';
 import { useAuth } from '../../../hooks/auth';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import { SubmitHandler, useForm } from 'react-hook-form';
 
 interface ForgotPasswordFormDataProps {

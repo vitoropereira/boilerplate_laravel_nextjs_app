@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import axios from '../server/axios';
 import Cookies from 'js-cookie';
 import { AuthUserContext } from '../utils/authContext';
-import { Console } from 'console';
 
 interface AuthProp {
     middleware?: string;

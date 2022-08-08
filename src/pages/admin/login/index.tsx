@@ -10,7 +10,6 @@ import GuestLayout from '../../../components/Layouts/GuestLayout';
 import Input from '../../../components/Input';
 import Label from '../../../components/Label';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 interface LoginFormDataProps {
     email: string;
