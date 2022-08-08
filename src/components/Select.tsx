@@ -10,7 +10,7 @@ export type OptionType = {
 
 interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
     error?: FieldError;
-    register: (name: string) => void;
+    register: (name: string, RegisterOptions?) => { onChange; onBlur; name; ref };
     className?: string;
     options: OptionType[];
     name: string;
